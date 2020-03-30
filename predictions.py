@@ -335,7 +335,7 @@ def _plot_rating_comparison(df, bref_year):
                                           alpha=0.5)))
     ax[1].add_artist(at)
     # add title to plot
-    plt.suptitle('Comparing Predictions with Ratings ({bref_year})', 
+    plt.suptitle(f'Comparing Predictions with Ratings ({bref_year})', 
                  fontsize=16)
     # better space two plots
     plt.subplots_adjust(wspace=0.5)
@@ -420,7 +420,8 @@ def _plot_winshares_comparison(df, bref_year):
                                           alpha=0.5)))
     ax[1].add_artist(at)
     # add title
-    plt.suptitle('Comparing Predictions with Win Shares', fontsize=16)
+    plt.suptitle(f'Comparing Predictions with Win Shares ({bref_year})', 
+                 fontsize=16)
     # adjust plot width
     plt.subplots_adjust(wspace=0.5)
     # save
