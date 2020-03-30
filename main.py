@@ -24,40 +24,39 @@ if not os.path.exists(possession_file):
         print('Extracting possessions from pbp files')
     data_prep.multi_extract_possession(pbp_files)
 
-
 # check to train or jump to experiment predictions
 # determined if experiment_id given in params
-if not experiment_id:
+if experiment_id is None:
 
     from training import train
 
     if verbose:
         print('Starting to train FMs')
 
-        # create experiment ID
-        experiment_id = ''.join([n for n in str(datetime.now())
-                                 if n.isnumeric()])
-        # make folder to save experiment results
-        os.makedirs(f'{xlearn_folder}/{experiment_id}')
+    # create experiment ID
+    experiment_id = ''.join([n for n in str(datetime.now())
+                             if n.isnumeric()])
+    # make folder to save experiment results
+    os.makedirs(f'{xlearn_folder}/{experiment_id}')
 
-        model_ids = []
-        # TO DO: make more dynamic
-        model_params = [(experiment_id, fac, seas, 
-                         pmin, gmin, tp) 
-                        for fac in factors 
-                        for seas in seasons 
-                        for pmin in player_min_poss_quantiles
-                        for gmin in group_min_poss_quantiles
-                        for tp in train_params]
+    model_ids = []
+    # TO DO: make more dynamic
+    model_params = [(experiment_id, fac, seas, 
+                     pmin, gmin, tp) 
+                    for fac in factors 
+                    for seas in seasons 
+                    for pmin in player_min_poss_quantiles
+                    for gmin in group_min_poss_quantiles
+                    for tp in train_params]
 
-        # train each parameter set
-        for model_param in tqdm(model_params):
-            mid = train(*model_param)
-            model_ids.append(mid)
+    # train each parameter set
+    for model_param in tqdm(model_params):
+        mid = train(*model_param)
+        model_ids.append(mid)
 
-        # save experiment information
-        joblib.dump([model_ids, model_params], 
-                    f'{xlearn_folder}/{experiment_id}/{experiment_id}.pkl')
+    # save experiment information
+    joblib.dump([model_ids, model_params], 
+                f'{xlearn_folder}/{experiment_id}/{experiment_id}.pkl')
 
 # examine experiment results
 if verbose:

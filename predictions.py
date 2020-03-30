@@ -7,15 +7,27 @@ from sklearn.datasets import dump_svmlight_file
 from glob import glob
 import joblib
 from tqdm.auto import tqdm
-import matplotlib.pyplot as plt
-from matplotlib.offsetbox import AnchoredText
-from matplotlib import cm
-import mpld3
 from scipy.stats import linregress
 import itertools
 import io
 from wurlitzer import pipes, STDOUT
+import matplotlib.pyplot as plt
+from matplotlib.offsetbox import AnchoredText
+from matplotlib import cm
+import mpld3
+# hack to make mpld3 work 
+# https://github.com/mpld3/mpld3/issues/434
+import json
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
+from mpld3 import _display
+_display.NumpyEncoder = NumpyEncoder
+
 from params import *
+
 
 def predict(experiment_id): 
     
@@ -195,9 +207,10 @@ def _make_individual_plots(df):
         # scale marker sizes
         marker_size = np.exp((pred_df.total_poss - 
                               pred_df.total_poss.mean()) / 
-                             pred_df.total_poss.std())
+                             pred_df.total_poss.std()) * 2
         # create plot
-        fig, ax = plt.subplots(figsize=(12,10))
+        #fig, ax = plt.subplots(figsize=(12,10))
+        fig, ax = plt.subplots(figsize=(10,8))
         # add points to scatter plot
         sc = ax.scatter(pred_df.off_wmn, pred_df.def_wmn, 
                         s=marker_size)
@@ -220,6 +233,7 @@ def _make_individual_plots(df):
                       labelpad=20, fontsize=16)
         ax.set_xlabel('Offensive Points Per Possession', 
                        labelpad=20, fontsize=16)
+        plt.tight_layout() # MAYBE REMOVE
         # create html labels for scatter plot
         base = ('https://ak-static.cms.nba.com/wp-content/' + 
                 'uploads/headshots/nba/latest/260x190')
@@ -777,7 +791,7 @@ def _tandem_predictions(experiment_id):
         # scale marker size
         marker_size = np.exp((season_top.min_duo_poss - 
                               season_top.min_duo_poss.mean()) 
-                             / season_top.min_duo_poss.std())
+                             / season_top.min_duo_poss.std()) * 2
         # format season parameter
         if len(k) == 0:
             s = min(pbp_seasons) - 1
@@ -788,7 +802,8 @@ def _tandem_predictions(experiment_id):
         else:
             k = ', '.join(i[:4]+'-'+i[4:] for i in k)
         # create figure
-        fig, ax = plt.subplots(figsize=(12,10))
+        #fig, ax = plt.subplots(figsize=(12,10))
+        fig, ax = plt.subplots(figsize=(10,8))
         sc = ax.scatter(season_top.off_wmn, season_top.def_wmn, 
                         s=marker_size)
         ax.plot([season_df.off_wmn.min(), 
@@ -808,6 +823,7 @@ def _tandem_predictions(experiment_id):
                       labelpad=20, fontsize=16)
         ax.set_xlabel('Offensive Points Per Possession', 
                        labelpad=20, fontsize=16)
+        plt.tight_layout()
         # create hover labels for scatter plot
         labels = [f'{n1} - {n2}' for i, (n1, n2) 
                   in season_top[['name1', 
