@@ -41,7 +41,7 @@ So these indvidual PPP predictions capture the same information as other basketb
 
 The next simplest case is when only two offensive or two defensive players are selected for prediction. The results represent how the duo together influence the average PPP. Again, ideal pairings have higher predicted offensive PPP and lower predicted defensive PPP (bottom right of these interactive plots).
 
-Click to see the 2018-2019 results: [img/tandem_ppp_2018-2019.html](img/tandem_ppp_2018-2019.html)
+Click to see the 2018-2019 results: [imgs/tandem_ppp_2018-2019.html](imgs/tandem_ppp_2018-2019.html)
 
 Only duos with the most possessions are shown because there are too many possible combinations to plot. 
 
