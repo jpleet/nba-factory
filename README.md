@@ -22,15 +22,15 @@ The size of the points are relative to the player's number of possessions. The F
 These individual contribution predictions, to me, make sense and also comply with existing basketball metrics.
 There are strong correlations between individual offensive and defensive PPP and individual offensive and defensive ratings, respectively.
 
-![rating comparison](imgs/compare_ppp_rtg.png)
+![rating comparison](imgs/compare_ppp_rtg_2019.png)
 
 Individual offensive and defensive PPP strongly correlates with Offensive and Defensive Win Shares. The defensive metrics negatively correlate because larger Win Shares and lower defensive PPP are better.
 
-![win shares comparison](imgs/compare_ppp_ws.png)
+![win shares comparison](imgs/compare_ppp_ws_2019.png)
 
 And there is also a strong correlation between individual offensive PPP and PER.  
 
-![per comparison](imgs/compare_ppp_per.png)
+![per comparison](imgs/compare_ppp_per_2019.png)
 
 So these indvidual PPP predictions capture the same information as other basketball metrics. But unlike these other metrics, this framework can be extended to measure the interactions between players.
 
