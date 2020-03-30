@@ -14,9 +14,17 @@ Each row is a grouping of offensive players, defensive players, and other possib
 
 The simplest case is looking at predictions of single offensive and defensive players. If only one player is selected, the FMs predict how much that player's presence alone influences the average PPP. The ideal player would have the highest PPP on offense and the lowest PPP on defense (bottom right of these interactive plots).   
 
-<iframe src="imgs/player_ppp_2018-2019.html"></iframe>
-
-<iframe src="imgs/player_ppp_2008-2019.html"></iframe>
+<body style="margin: 0 auto;">
+        <iframe src="imgs/player_ppp_2018-2019.html" frameborder="0" 
+         style="overflow:hidden; 
+         display:block; position: absolute; height: 100%; width: 100%">
+</body>
+<p></p>
+<body style="margin: 0 auto;">
+        <iframe src="imgs/player_ppp_2008-2019.html" frameborder="0" 
+         style="overflow:hidden; 
+         display:block; position: absolute; height: 100%; width: 100%">
+</body>
 
 
 The size of the points are relative to the player's number of possessions. The FMs can better learn about players with more possession data, so there's likely more confidence in larger points. 
@@ -40,7 +48,11 @@ So these indvidual PPP predictions capture the same information as other basketb
 
 The next simplest case is when only two offensive or two defensive players are selected for prediction. The results represent how the duo together influence the average PPP. Again, ideal pairings have higher predicted offensive PPP and lower predicted defensive PPP (bottom right of these interactive plots).
 
-<iframe src="imgs/tandem_ppp_2018-2019.html"></iframe>
+<body style="margin: 0 auto;">
+        <iframe src="imgs/tandem_ppp_2018-2019.html" frameborder="0" 
+         style="overflow:hidden; 
+         display:block; position: absolute; height: 100%; width: 100%">
+</body>
 
 Only players with the most possessions are shown because there are too many possible combinations to plot. 
 
