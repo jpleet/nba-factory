@@ -4,7 +4,7 @@
 verbose = True
 
 # change to skip training and go to predictions
-experiment_id = None #'20200329223617254221'
+experiment_id = None '20200330175259675368'
 
 # Training params
 # list of factors to consider in the FM
@@ -21,18 +21,17 @@ seasons = [[], ['20182019'],
 # threhsold determined by quantiles. the more data
 # per player, the better the model -- at the expense
 # of learning about less players 
-player_min_poss_quantiles = [0.3, 0.4]
+player_min_poss_quantiles = [0.2, 0.3, 0.4]
 # remove groups of factors with number of 
 # possessions below threshold determined by 
 # quantiles. again, controls the number of data
 # points per player at the expense of learning
 # about less players.
-group_min_poss_quantiles = [0.3, 0.4]
+group_min_poss_quantiles = [0.2, 0.3, 0.4]
 # parameters passed to train xlearn FMs
 # all must be regressions. more exploration
 # into parameters is needed.
-train_params = [{'task':'reg'}, 
-                {'task':'reg', 'k':5}]
+train_params = [{'task':'reg'}]
 
 # Prediction params
 # whether to makes predictions of individual
@@ -57,7 +56,7 @@ individual_series = ['Steve Nash', 'LeBron James',
 series_bars = 100
 # whether to make predictions of offensive
 # and defensive pairings
-tandem_predictions = True
+tandem_predictions = False#True
 # what quantile of players to plot pairings
 # predictions. Needs to be high, otherwise
 # way too many points to plot

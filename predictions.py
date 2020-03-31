@@ -75,7 +75,8 @@ def _individual_predictions(experiment_id):
         # make offensive predictions
         # get offensive player info from model run
         off_df = model_dict['offense'].merge(player_df[['PERSON_ID', 
-                                                        'name']], 
+                                                        'name',
+                                                        'TEAM_NAME']], 
                                              left_on='player_id', 
                                              right_on='PERSON_ID', 
                                              how='left')    
@@ -106,7 +107,8 @@ def _individual_predictions(experiment_id):
 
         # make defensive predictions (same process as offense)
         def_df = model_dict['defense'].merge(player_df[['PERSON_ID', 
-                                                        'name']], 
+                                                        'name', 
+                                                        'TEAM_NAME']], 
                                              left_on='player_id', 
                                              right_on='PERSON_ID', 
                                              how='left')    
@@ -129,7 +131,8 @@ def _individual_predictions(experiment_id):
 
         # merge predictions
         pred_df = pd.merge(off_df[['name', 'player_id', 
-                                   'off_ppp', 'off_count']],
+                                   'off_ppp', 'off_count', 
+                                   'TEAM_NAME',]],
                            def_df[['name', 'player_id', 
                                    'def_ppp', 'def_count']],
                            on = ['name', 'player_id'])
@@ -157,20 +160,26 @@ def _individual_predictions(experiment_id):
     # defensive PPP, weighted by the inverse of the 
     # prediction model's cross-validation loss.
     # so better models have more weight
+    num_seasons = all_preds.seasons.nunique()
+    models_per_season = len(mids) // num_seasons
     all_season_preds = []
     for k, g in all_preds.groupby(['name', 
                                    'player_id', 
+                                   'TEAM_NAME',
                                    'seasons']):
-        n, p, s = k
-        off_wmn = np.average(g.off_ppp, 
-                             weights=g.cv_weight)
-        def_wmn = np.average(g.def_ppp, 
-                             weights=g.cv_weight) 
-        tot_poss = g.total_count.sum()
-        all_season_preds.append([n, p, s, off_wmn, 
-                                 def_wmn, tot_poss])
+        if len(g) == models_per_season:
+            # only plot players that have predictions
+            # for all models. 
+            n, p, t, s = k
+            off_wmn = np.average(g.off_ppp.values, 
+                                 weights=g.cv_weight.values)      
+            def_wmn = np.average(g.def_ppp.values, 
+                                 weights=g.cv_weight.values) 
+            tot_poss = g.total_count.sum()
+            all_season_preds.append([n, p, t, s, off_wmn, 
+                                     def_wmn, tot_poss])
     all_season_preds = pd.DataFrame(all_season_preds, 
-        columns=['name', 'player_id', 'seasons', 
+        columns=['name', 'player_id', 'team', 'seasons', 
                  'off_wmn', 'def_wmn', 'total_poss'])  
 
     # Make plots 
@@ -194,6 +203,7 @@ def _make_individual_plots(df):
     # offensive and defensive PPP
     for k, pred_df in df.groupby('seasons'):
 
+        
         # format season parameter
         if len(k) == 0:
             s = min(pbp_seasons) - 1
@@ -203,17 +213,21 @@ def _make_individual_plots(df):
             k = k[0][0:4] + '-' + k[0][4:]
         else:
             k = ', '.join(i[:4]+'-'+i[4:] for i in k)
-
+        # team color
+        #tcs = pred_df.team.rank(method='dense') - 1
+        #tcs = (tcs / pred_df.team.nunique()) * 255
+        #gn = cm.get_cmap("gist_ncar")
+        #colors = [gn(int(i)) for i in tcs]
         # scale marker sizes
         marker_size = np.exp((pred_df.total_poss - 
                               pred_df.total_poss.mean()) / 
-                             pred_df.total_poss.std()) * 2
+                             pred_df.total_poss.std()) ** 2
         # create plot
         #fig, ax = plt.subplots(figsize=(12,10))
         fig, ax = plt.subplots(figsize=(10,8))
         # add points to scatter plot
         sc = ax.scatter(pred_df.off_wmn, pred_df.def_wmn, 
-                        s=marker_size)
+                        s=marker_size)#, color=colors)
         # add mean grid line
         ax.plot([pred_df.off_wmn.min(), 
                  pred_df.off_wmn.max()], 
@@ -259,7 +273,6 @@ def _make_individual_correlations(df):
     # existing basketball metrics downloaded
     # from basketball-refences
     bref_year = correlation_season[4:]
-
     season_preds = df[df.seasons == 
                       (correlation_season,)].copy()
 
@@ -296,8 +309,8 @@ def _plot_rating_comparison(df, bref_year):
     # merge with season ppp values
     pred_ratings = df.merge(bref_player_ratings, 
                             left_on='name', 
-                            right_on='Player')#.dropna(
-                                #subset=['ORtg', 'DRtg'])
+                            right_on='Player')
+    pred_ratings.dropna(inplace=True, subset=['ORtg', 'DRtg'])
     # normalize offensive ratings and PPP
     bref_ortg_norm = ((pred_ratings.ORtg - 
                        pred_ratings.ORtg.mean()) 
@@ -382,6 +395,7 @@ def _plot_winshares_comparison(df, bref_year):
     pred_advanced = df.merge(bref_player_ws, 
                              left_on='name', 
                              right_on='Player')#.dropna()
+    pred_advanced.dropna(inplace=True, subset=['OWS', 'DWS'])
     # normalize values
     pred_advanced['off_wmn_norm'] = ((pred_advanced.off_wmn - 
                                       pred_advanced.off_wmn.mean()) 
@@ -466,6 +480,7 @@ def _plot_per_comparison(df, bref_year):
     pred_advanced = df.merge(bref_player_per, 
                              left_on='name', 
                              right_on='Player')#.dropna()
+    pred_advanced.dropna(inplace=True, subset=['PER'])
     # normalize per
     pred_advanced['off_wmn_norm'] = ((pred_advanced.off_wmn - 
                                       pred_advanced.off_wmn.mean()) 
