@@ -18,7 +18,6 @@ The simplest case is predicting single offensive and defensive players. If only 
 The individual offensive and defensive contributions to PPP for all seasons between 2008 and 2019. 
 
 <iframe src="imgs/player_ppp_2008-2019.html"
-    sandbox="allow-same-origin allow-scripts"
     width="100%"
     height="500"
     scrolling="no"
