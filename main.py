@@ -1,7 +1,6 @@
 # Runs an experiment from parameters in params.py
 
 import os
-from glob import glob
 import joblib
 from tqdm.auto import tqdm
 from datetime import datetime
