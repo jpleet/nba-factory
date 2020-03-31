@@ -1,6 +1,6 @@
 # The NBA Factory Machine
 
-A framework to train [factorization machines](https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf) (FMs) to learn about NBA players and their contributions to points per possession (PPP). FM predictions can be used to measure how individual players or sets of players influence PPP. There are endless possibilities to explore with this framework. Feel free to comment, test, and share.  
+A framework to train [factorization machines](https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf) (FMs) to learn about NBA players and their contributions to points per possession (PPP). Trained FMs can then be used to measure how individual players or sets of players influence PPP. There are endless possibilities to explore with this framework. Feel free to comment, test, and share.  
 
 
 ## Overview
@@ -15,7 +15,16 @@ Each row is a group of (5) offensive players, (5) defensive players, and other p
  
 The simplest case is predicting single offensive and defensive players. If only one player is selected, the FMs predict how much that player's presence alone influences the average PPP. The ideal player would have the highest PPP on offense and the lowest PPP on defense --- bottom right of these interactive plots below (work best on desktop to hover points). The size of the points are relative to the player's number of possessions. The FMs can better learn about players with more possession data, so there's likely more confidence in larger points.  
 
-The individual offensive and defensive contributions to PPP for all seasons between 2008 and 2019. 
+The individual offensive and defensive contributions to PPP for all seasons between 2008 and 2019:
+
+<iframe src="imgs/player_ppp_2008-2019.html"
+    width="100%"
+    height="550"
+    scrolling="no"
+    seamless="seamless"
+    frameborder="0">
+</iframe>  
+
 
 Results for each season can be found here:
 
@@ -33,11 +42,8 @@ Results for each season can be found here:
 | [2017-2018](imgs/player_ppp_2017-2018.html) |
 | [2018-2019](imgs/player_ppp_2018-2019.html) |
 
-|   All Seasons                               |
-|  --------                                   |
-| [2008-2019](imgs/player_ppp_2008-2019.html) |
 
-Visaully, to me, these individual PPP contributions make sense; but more importantly, they comply with other basketball metrics. 
+Visually, to me, these individual PPP contributions make sense; but more importantly, they comply with other basketball metrics. 
 
 ### Case 2: Comparing Existing Analytics
 
@@ -58,6 +64,19 @@ So these indvidual PPP predictions capture the same information as other basketb
 ### Case 2: Tandem Predictions
 
 The next simplest case is when only two offensive or two defensive players are selected for prediction. The results represent how the duo together influence the average PPP. Again, ideal pairings have higher predicted offensive PPP and lower predicted defensive PPP (bottom right of theis interactive plots).
+
+These are the offensive and defensive PPP for pairing of players in the 2018-2019 season:
+
+<iframe src="imgs/tandem_ppp_2018-2019.html"
+    width="100%"
+    height="550"
+    scrolling="no"
+    seamless="seamless"
+    frameborder="0">
+</iframe>
+
+
+Other season results can be found here:
 
 |   Season                                    |
 |  --------                                   |
@@ -81,7 +100,14 @@ Only duos with the most possessions are shown because there are too many possibl
 
 ### More Cases
 
-There are lots of possibilities to explore with this framework, like: predicting the best trio, or lineup; finding who'd best fill a roster spot; examining the latent variables in the FMs; correlating individual PPP with team success; better investigating the training parameters; or projecting players from seasonal PPP values (I'm thinking [CARMELO](https://projects.fivethirtyeight.com/carmelo/) with this framework).  
+There are lots of possibilities to explore with this framework, like: 
+- predicting the best trio, or lineup 
+- finding who'd best fill a lineup spot 
+- examining the latent variables in the FMs 
+- correlating individual PPP with team success 
+- better investigating the training parameters
+- projecting players from seasonal PPP values (I'm thinking [CARMELO](https://projects.fivethirtyeight.com/carmelo/) with this framework).  
+- etc. . .
 
 ## Some Technical Details   
 

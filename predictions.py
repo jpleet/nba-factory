@@ -224,7 +224,8 @@ def _make_individual_plots(df):
                              pred_df.total_poss.std()) ** 2
         # create plot
         #fig, ax = plt.subplots(figsize=(12,10))
-        fig, ax = plt.subplots(figsize=(10,8))
+        fig, ax = plt.subplots(figsize=(500/50,500/50), 
+                               dpi=50)
         # add points to scatter plot
         sc = ax.scatter(pred_df.off_wmn, pred_df.def_wmn, 
                         s=marker_size)#, color=colors)
@@ -244,10 +245,10 @@ def _make_individual_plots(df):
         ax.set_title(k, fontsize=20)
         # add labels
         ax.set_ylabel('Defensive Points Per Possession', 
-                      labelpad=20, fontsize=16)
+                      labelpad=30, fontsize=14)
         ax.set_xlabel('Offensive Points Per Possession', 
-                       labelpad=20, fontsize=16)
-        plt.tight_layout() # MAYBE REMOVE
+                       labelpad=20, fontsize=14)
+        #plt.tight_layout() # MAYBE REMOVE
         # create html labels for scatter plot
         base = ('https://ak-static.cms.nba.com/wp-content/' + 
                 'uploads/headshots/nba/latest/260x190')
@@ -818,7 +819,9 @@ def _tandem_predictions(experiment_id):
             k = ', '.join(i[:4]+'-'+i[4:] for i in k)
         # create figure
         #fig, ax = plt.subplots(figsize=(12,10))
-        fig, ax = plt.subplots(figsize=(10,8))
+        #fig, ax = plt.subplots(figsize=(10,8))
+        fig, ax = plt.subplots(figsize=(500/50,500/50), 
+                               dpi=50)
         sc = ax.scatter(season_top.off_wmn, season_top.def_wmn, 
                         s=marker_size)
         ax.plot([season_df.off_wmn.min(), 
@@ -835,10 +838,10 @@ def _tandem_predictions(experiment_id):
         ax.set_title(k, fontsize=20)
         # add labels
         ax.set_ylabel('Defensive Points Per Possession', 
-                      labelpad=20, fontsize=16)
+                      labelpad=30, fontsize=14)
         ax.set_xlabel('Offensive Points Per Possession', 
-                       labelpad=20, fontsize=16)
-        plt.tight_layout()
+                       labelpad=20, fontsize=14)
+        #plt.tight_layout()
         # create hover labels for scatter plot
         labels = [f'{n1} - {n2}' for i, (n1, n2) 
                   in season_top[['name1', 

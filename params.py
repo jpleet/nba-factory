@@ -4,7 +4,7 @@
 verbose = True
 
 # change to skip training and go to predictions
-experiment_id = None #'20200330175259675368'
+experiment_id = None # '20200330183200012508'
 
 # Training params
 # list of factors to consider in the FM
@@ -56,11 +56,11 @@ individual_series = ['Steve Nash', 'LeBron James',
 series_bars = 100
 # whether to make predictions of offensive
 # and defensive pairings
-tandem_predictions = False#True
+tandem_predictions = True
 # what quantile of players to plot pairings
 # predictions. Needs to be high, otherwise
 # way too many points to plot
-tandem_quantile = 0.95
+tandem_quantile = 0.99
 
 # Hard-coded parameters. don't need to change
 possession_file = 'data/df_all_poss.csv' 

@@ -2,3 +2,6 @@
 *.pkl
 *.out
 *.txt
+.spyproject/
+*__pycache__/
+notebooks/
