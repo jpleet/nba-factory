@@ -19,7 +19,7 @@ The individual offensive and defensive contributions to PPP for all seasons betw
 
 <iframe src="imgs/player_ppp_2008-2019.html"
     width="100%"
-    height="100%"
+    height="800"
     scrolling="no"
     seamless="seamless"
     frameborder="0">
