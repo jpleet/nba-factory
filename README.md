@@ -1,7 +1,6 @@
 # The NBA Factory Machine
 
-A framework that uses [factorization machines](https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf) (FMs) to learn about NBA players and their contributions to points per possession (PPP). Trained FMs can then be used to measure how individual players or sets of players influence PPP. There are endless possibilities to explore with this framework. Feel free to comment, test, and share.  
-
+A framework using [factorization machines](https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf) (FMs) to learn about NBA players and their contributions to points per possession (PPP). Trained FMs can then predict how individual players or sets of players influence PPP. There are endless possibilities to explore with this framework. Feel free to comment, test, and share.  
 
 ## Overview
 
@@ -92,7 +91,7 @@ There are lots of avenues to explore with this framework, like:
 - finding who'd best fill a lineup spot 
 - examining the latent variables of the FMs 
 - correlating individual PPP with team success 
-- better investigating the training parameters
+- better investigating the training parameters (this is the most important, but boring)
 - projecting players from seasonal PPP values (I'm thinking [CARMELO](https://projects.fivethirtyeight.com/carmelo/) with this framework).  
 - etc. . .
 
@@ -101,4 +100,6 @@ There are lots of avenues to explore with this framework, like:
 Multiple FMs are cross-validated and trained on sparse possession data with different parameter settings. The loss from the cross-validations are used as weights in combining the predicted results of the multiple FMs. 
 
 More details can be found in the Python scripts within the GitHub repo. To run an experiment, start by setting up a Conda environment from the *environment.yaml* file. The *main.py* script reads from *params.py* and performs an experiment. Only *params.py* needs to change for new experiments. 
+
+The data comes from [eightthiryfour](https://eightthirtyfour.com/). Their extended play-by-play datasets contain all players on the floor at all times. 
 
