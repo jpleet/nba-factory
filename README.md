@@ -4,7 +4,9 @@ A framework built on training [factorization machines](https://www.csie.ntu.edu.
 
 ## Overview
 
-Play-by-play data is first formatted into sparse possession results that looks like this:
+In essence, basketball is played between two teams of five players, with each team trying to score on their offensive possessions &mdash; and so it should be modelled as such. Current basketball analytics attempt to quantify player contributions with long contentious formulas (e.g. [PER](https://en.wikipedia.org/wiki/Player_efficiency_rating), [Win Shares](https://en.wikipedia.org/wiki/Win_Shares)) focused on specific stats, like field goals and steals. Instead, the focus should be on the result of a possession and [latent variables](https://en.wikipedia.org/wiki/Latent_variable) calculated by trained machines, not by hand-tailored hand-wavy formulas. 
+
+To start, play-by-play data is formatted into sparse possession results that looks like this:
 
 ![](imgs/sparse_regression.png).
 
@@ -97,8 +99,6 @@ There are lots of avenues to explore with this framework, like:
 - etc. . .
 
 ## Some Technical Details   
-
-In essence, basketball is played between two teams of five players, with each team trying to score on their offensive possessions &mdash; and so it should be modelled as such. Current basketball analytics attempt to quantify player contributions with long contentious formulas (e.g. [PER](https://en.wikipedia.org/wiki/Player_efficiency_rating), [Win Shares](https://en.wikipedia.org/wiki/Win_Shares)) focused on specific stats, like field goals and steals. Instead, the focus should be on what's important: the result of a possession and not hand-tailoring formulas to measure [latent](https://en.wikipedia.org/wiki/Latent_variable) variables &mdash; computers are much better at calculating latent features.  
 
 Multiple FMs are cross-validated and trained on sparse possession data with different parameter settings. The loss from the cross-validations are used as weights in combining the predicted results of the multiple FMs. 
 
