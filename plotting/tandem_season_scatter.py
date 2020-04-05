@@ -43,13 +43,13 @@ def plot(df):
             posses = season_top.min_duo_poss.values, 
             mark_size = marker_size))   
 
-        tooltip = [("name:", "$name1"), 
-                   ("name:", "$name2"), 
-                   ("poss:", "$posses")]     
+        tooltip = [("name:", "@name1"), 
+                   ("name:", "@name2"), 
+                   ("poss:", "@posses")]     
 
         p = figure(plot_width=500, plot_height=500, 
-           sizing_mode="stretch_both", tooltips=tooltip, 
-           title=k)
+                   sizing_mode="stretch_both", tooltips=tooltip, 
+                   title=k)
         p.title.text_font_size = '18pt'
         p.circle('x', 'y', size='mark_size', source=source)
         p.xaxis.axis_label = 'Offensive PPP'

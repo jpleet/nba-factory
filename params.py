@@ -4,7 +4,7 @@
 verbose = True
 
 # change to skip training and go to predictions
-experiment_id = None #'20200330183200012508'
+experiment_id = None # '20200330183200012508'
 
 # Training params
 # list of factors to consider in the FM
