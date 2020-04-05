@@ -4,7 +4,7 @@
 verbose = True
 
 # change to skip training and go to predictions
-experiment_id = None # '20200330183200012508'
+experiment_id = None #'20200330183200012508'
 
 # Training params
 # list of factors to consider in the FM
@@ -46,21 +46,26 @@ individual_correlations = True
 correlation_season = '20182019'
 # creates plots of individaul PPPs over their 
 # career. Add name to list. If None, skips.
-individual_series = ['Steve Nash', 'LeBron James', 
+#individual_series = None
+#"""
+individual_series = ['LeBron James', 
                      'Andrew Wiggins', 
-                     'Andrea Bargnani', 
-                     'Kevin Durant', 'James Harden', 
+                     'Kevin Durant', 
+                     'James Harden', 
                      'Giannis Antetokounmpo', 
                      'Vince Carter']
+#"""
 # variable to colour code career series plots
 series_bars = 100
 # whether to make predictions of offensive
 # and defensive pairings
 tandem_predictions = True
+# whether to plot tandem results
+tandem_plots = True
 # what quantile of players to plot pairings
 # predictions. Needs to be high, otherwise
 # way too many points to plot
-tandem_quantile = 0.99
+tandem_quantile = 0.995
 
 # Hard-coded parameters. don't need to change
 possession_file = 'data/df_all_poss.csv' 
