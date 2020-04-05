@@ -1,6 +1,6 @@
 # The NBA Factory Machine
 
-A framework using [factorization machines](https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf) (FMs) to learn about NBA players and their contributions to points per possession (PPP). Trained FMs can then predict how individual players or sets of players influence PPP. There are endless possibilities to explore with this framework. Feel free to comment, test, and share.  
+A framework using [factorization machines](https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf) (FMs) to learn about NBA players and their contributions to points per possession (PPP). Trained FMs can predict how individual players or sets of players influence PPP. There are endless possibilities to explore with this framework. Feel free to comment, test, and share.  
 
 ## Overview
 
@@ -8,11 +8,11 @@ Play-by-play data is first formatted into sparse possession results that looks l
 
 ![](imgs/sparse_regression.png).
 
-Each row is a group of (5) offensive players, (5) defensive players, and other possible factors (like quarter or home team) along with the group's average points per possession (PPP). FMs are trained on this sparse possession data to learn how all factors contribute to PPP. The trained FMs can then be used to predict PPP for different combinations of factors, like offensive and defensive players. 
+Each row is a unique group of (5) offensive players, (5) defensive players, and other possible factors (like quarter or home team) along with the group's PPP. FMs are trained on this sparse possession data to learn how all factors contribute to PPP. The trained FMs can then be used to predict PPP for different combinations of factors, like offensive and defensive players. 
 
 ### Case 1: Individual Predictions
  
-The simplest case is predicting single offensive and defensive players. If only one player is selected, the FMs predict how much that player's presence alone influences PPP. The ideal player would have the highest PPP on offense and the lowest PPP on defense --- bottom right of these interactive plots below. Plots work best on desktop to hover over points. The size of the points are relative to the player's number of possessions. The FMs can better learn about players with more possession data, so there's likely more confidence in larger points.  
+The simplest case is predicting single offensive and defensive players. If only one player is selected, the FMs predict how much that player's presence alone influences PPP. The ideal player would have the highest PPP on offense and the lowest PPP on defense --- bottom right of these interactive plots below. The size of the points are relative to the player's number of possessions. The FMs can better learn about players with more possession data, so there's likely more confidence in larger points.  
 
 The individual offensive and defensive contributions to PPP for all seasons between 2008 and 2019:
 
@@ -27,17 +27,23 @@ The individual offensive and defensive contributions to PPP for all seasons betw
 
 Results for each season can be found here:
 
-|   Season                                    |   Season                                    |
-|  --------                                   |  --------                                   |
-| [2008-2009](imgs/player_ppp_2008-2009.html) | [2014-2015](imgs/player_ppp_2014-2015.html) |
-| [2009-2010](imgs/player_ppp_2009-2010.html) | [2015-2016](imgs/player_ppp_2015-2016.html) |
-| [2010-2011](imgs/player_ppp_2010-2011.html) | [2016-2017](imgs/player_ppp_2016-2017.html) |
-| [2011-2012](imgs/player_ppp_2011-2012.html) | [2017-2018](imgs/player_ppp_2017-2018.html) |
-| [2012-2013](imgs/player_ppp_2012-2013.html) | [2018-2019](imgs/player_ppp_2018-2019.html) |
-| [2013-2014](imgs/player_ppp_2013-2014.html) | [All](imgs/player_ppp_2008-2019.html)       |
+|   Desktop                                   |   Mobile                                           |
+|  --------                                   |  --------                                          |
+| [2008-2009](imgs/player_ppp_2008-2009.html) | [2008-2009](imgs/player_ppp_2008-2009_mobile.html) |
+| [2009-2010](imgs/player_ppp_2009-2010.html) | [2009-2010](imgs/player_ppp_2009-2010_mobile.html) |
+| [2010-2011](imgs/player_ppp_2010-2011.html) | [2010-2011](imgs/player_ppp_2010-2011_mobile.html) |
+| [2011-2012](imgs/player_ppp_2011-2012.html) | [2011-2012](imgs/player_ppp_2011-2012_mobile.html) |
+| [2012-2013](imgs/player_ppp_2012-2013.html) | [2012-2013](imgs/player_ppp_2012-2013_mobile.html) |
+| [2013-2014](imgs/player_ppp_2013-2014.html) | [2013-2014](imgs/player_ppp_2013-2014_mobile.html) |
+| [2014-2015](imgs/player_ppp_2014-2015.html) | [2014-2015](imgs/player_ppp_2014-2015_mobile.html) |
+| [2015-2016](imgs/player_ppp_2015-2016.html) | [2015-2016](imgs/player_ppp_2015-2016_mobile.html) |
+| [2016-2017](imgs/player_ppp_2016-2017.html) | [2016-2017](imgs/player_ppp_2016-2017_mobile.html) |
+| [2017-2018](imgs/player_ppp_2017-2018.html) | [2017-2018](imgs/player_ppp_2017-2018_mobile.html) |
+| [2018-2019](imgs/player_ppp_2018-2019.html) | [2018-2019](imgs/player_ppp_2018-2019_mobile.html) |
+| [All](imgs/player_ppp_2008-2019.html)       | [All](imgs/player_ppp_2008-2019_mobile.html)       |
 
 
-Visually, to me, these individual PPP contributions make sense; but more importantly, they comply with other basketball metrics. 
+Visually, these individual PPP contributions seem to make sense; but more importantly, they comply with other basketball metrics. 
 
 ### Case 2: Comparing Existing Analytics
 
@@ -53,7 +59,7 @@ And there's also a strong correlation between individual offensive PPP and [PER]
 
 ![](imgs/compare_ppp_per_2019.png)
 
-So these indvidual PPP predictions capture the same information as other basketball metrics. But unlike other metrics, this framework can be extended to measure the interactions between players.
+So these indvidual PPP predictions capture the same information as other basketball metrics. But unlike these other metrics, this framework can be extended to measure the interactions between players.
 
 ### Case 2: Tandem Predictions
 
@@ -72,14 +78,20 @@ These are the offensive and defensive PPP for pairing of players in the 2018-201
 
 Other season results can be found here:
 
-|   Season                                    |   Season                                    |
-|  --------                                   |  --------                                   |
-| [2008-2009](imgs/tandem_ppp_2008-2009.html) | [2014-2015](imgs/tandem_ppp_2014-2015.html) |
-| [2009-2010](imgs/tandem_ppp_2009-2010.html) | [2015-2016](imgs/tandem_ppp_2015-2016.html) |
-| [2010-2011](imgs/tandem_ppp_2010-2011.html) | [2016-2017](imgs/tandem_ppp_2016-2017.html) |
-| [2011-2012](imgs/tandem_ppp_2011-2012.html) | [2017-2018](imgs/tandem_ppp_2017-2018.html) |
-| [2012-2013](imgs/tandem_ppp_2012-2013.html) | [2018-2019](imgs/tandem_ppp_2018-2019.html) |
-| [2013-2014](imgs/tandem_ppp_2013-2014.html) | [All](imgs/tandem_ppp_2008-2019.html)       |
+|   Desktop                                   |   Mobile                                           |
+|  --------                                   |  --------                                          |
+| [2008-2009](imgs/tandem_ppp_2008-2009.html) | [2008-2009](imgs/tandem_ppp_2008-2009_mobile.html) |
+| [2009-2010](imgs/tandem_ppp_2009-2010.html) | [2009-2010](imgs/tandem_ppp_2009-2010_mobile.html) |
+| [2010-2011](imgs/tandem_ppp_2010-2011.html) | [2010-2011](imgs/tandem_ppp_2010-2011_mobile.html) |
+| [2011-2012](imgs/tandem_ppp_2011-2012.html) | [2011-2012](imgs/tandem_ppp_2011-2012_mobile.html) |
+| [2012-2013](imgs/tandem_ppp_2012-2013.html) | [2012-2013](imgs/tandem_ppp_2012-2013_mobile.html) |
+| [2013-2014](imgs/tandem_ppp_2013-2014.html) | [2013-2014](imgs/tandem_ppp_2013-2014_mobile.html) |
+| [2014-2015](imgs/tandem_ppp_2014-2015.html) | [2014-2015](imgs/tandem_ppp_2014-2015_mobile.html) |
+| [2015-2016](imgs/tandem_ppp_2015-2016.html) | [2015-2016](imgs/tandem_ppp_2015-2016_mobile.html) |
+| [2016-2017](imgs/tandem_ppp_2016-2017.html) | [2016-2017](imgs/tandem_ppp_2016-2017_mobile.html) |
+| [2017-2018](imgs/tandem_ppp_2017-2018.html) | [2017-2018](imgs/tandem_ppp_2017-2018_mobile.html) |
+| [2018-2019](imgs/tandem_ppp_2018-2019.html) | [2018-2019](imgs/tandem_ppp_2018-2019_mobile.html) |
+| [All](imgs/tandem_ppp_2008-2019.html)       | [All](imgs/tandem_ppp_2008-2019_mobile.html)       |
 
 
 Only duos with the most possessions are shown because there are too many possible combinations to plot. 
@@ -90,9 +102,10 @@ There are lots of avenues to explore with this framework, like:
 - predicting the best trio, or lineup 
 - finding who'd best fill a lineup spot 
 - examining the latent variables of the FMs 
-- correlating individual PPP with team success 
+- exploring more factors like quarters (who best 4th?), home team (who better at home?)
+- correlating individual PPP with team success (is sum of parts equal to whole?)
 - better investigating the training parameters (this is the most important, but boring)
-- projecting players from seasonal PPP values (I'm thinking [CARMELO](https://projects.fivethirtyeight.com/carmelo/) with this framework).  
+- projecting players from seasonal PPP values (I'm thinking [CARMELO](https://projects.fivethirtyeight.com/carmelo/) with this framework)  
 - etc. . .
 
 ## Some Technical Details   
