@@ -46,8 +46,9 @@ individual_correlations = True
 correlation_season = '20182019'
 # creates plots of individaul PPPs over their 
 # career. Add name to list. If None, skips.
-individual_series = ['LeBron James', 
+individual_series = ['Steve Nash', 'LeBron James', 
                      'Andrew Wiggins', 
+                     'Andrea Bargnani', 
                      'Kevin Durant', 'James Harden', 
                      'Giannis Antetokounmpo', 
                      'Vince Carter']
@@ -69,5 +70,3 @@ pbp_seasons = range(2009, 2020)
 xlearn_folder = 'data/xlearn'
 valid_size = 0.2
 prediction_folder = 'imgs'
-save_desktop_format = True
-save_mobile_format = True

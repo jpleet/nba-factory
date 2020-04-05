@@ -12,12 +12,9 @@ import itertools
 import io
 from wurlitzer import pipes, STDOUT
 import matplotlib.pyplot as plt
-import matplotlib
 from matplotlib.offsetbox import AnchoredText
 from matplotlib import cm
 import mpld3
-from mpld3.utils import get_id
-from mpld3.plugins import PluginBase
 # hack to make mpld3 work 
 # https://github.com/mpld3/mpld3/issues/434
 import json
@@ -225,102 +222,51 @@ def _make_individual_plots(df):
         marker_size = np.exp((pred_df.total_poss - 
                               pred_df.total_poss.mean()) / 
                              pred_df.total_poss.std()) ** 2
-
-
-        # check if making desktop plot
-        if save_desktop_format:
-            # create plot
-            #fig, ax = plt.subplots(figsize=(12,10))
-            fig, ax = plt.subplots(figsize=(500/50,500/50), 
-                                   dpi=50)
-            # add points to scatter plot
-            sc = ax.scatter(pred_df.off_wmn, pred_df.def_wmn, 
-                            s=marker_size)#, color=colors)
-            # add mean grid line
-            ax.plot([pred_df.off_wmn.min(), 
-                     pred_df.off_wmn.max()], 
-                    [pred_df.def_wmn.mean(), 
-                     pred_df.def_wmn.mean()], 
-                    ls='--', color='grey')
-            # add other mean grid line
-            ax.plot([pred_df.off_wmn.mean(), 
-                     pred_df.off_wmn.mean()], 
-                    [pred_df.def_wmn.min(), 
-                     pred_df.def_wmn.max()], 
-                    ls='--', color='grey')
-            # set title
-            ax.set_title(k, fontsize=20)
-            # add labels
-            ax.set_ylabel('Defensive Points Per Possession', 
-                          labelpad=30, fontsize=14)
-            ax.set_xlabel('Offensive Points Per Possession', 
-                           labelpad=20, fontsize=14)
-            #plt.tight_layout() # MAYBE REMOVE
-            # create html labels for scatter plot
-            base = ('https://ak-static.cms.nba.com/wp-content/' + 
-                    'uploads/headshots/nba/latest/260x190')
-            labels = [(f'<img src="{base}/{pid}.png">' + 
-                       f'<p>{nm}</p>') for _, (pid, nm) in 
-                      pred_df[['player_id', 'name']].iterrows()]
-            # create mpld3 tooltip
-            tooltip = mpld3.plugins.PointHTMLTooltip(
-                sc, labels=labels)
-            # add tooltip to figure
-            mpld3.plugins.connect(fig, tooltip)
-            # save figure
-            html = mpld3.fig_to_html(fig)
-            sfile = f'{prediction_folder}/player_ppp_{k}.html'
-            with open(sfile, 'w') as f:
-                f.write(html)
-            # close plot 
-            plt.close()
-
-        # check to save as mobile format
-        if save_mobile_format:
-            # need to repeat building plot, change tooltip
-            fig, ax = plt.subplots(figsize=(500/50,500/50), 
-                                   dpi=50)
-            # add points to scatter plot
-            sc = ax.scatter(pred_df.off_wmn, pred_df.def_wmn, 
-                            s=marker_size)#, color=colors)
-            # add mean grid line
-            ax.plot([pred_df.off_wmn.min(), 
-                     pred_df.off_wmn.max()], 
-                    [pred_df.def_wmn.mean(), 
-                     pred_df.def_wmn.mean()], 
-                    ls='--', color='grey')
-            # add other mean grid line
-            ax.plot([pred_df.off_wmn.mean(), 
-                     pred_df.off_wmn.mean()], 
-                    [pred_df.def_wmn.min(), 
-                     pred_df.def_wmn.max()], 
-                    ls='--', color='grey')
-            # set title
-            ax.set_title(k, fontsize=20)
-            # add labels
-            ax.set_ylabel('Defensive Points Per Possession', 
-                          labelpad=30, fontsize=14)
-            ax.set_xlabel('Offensive Points Per Possession', 
-                           labelpad=20, fontsize=14)
-            #plt.tight_layout() # MAYBE REMOVE
-            # create html labels for scatter plot
-            base = ('https://ak-static.cms.nba.com/wp-content/' + 
-                    'uploads/headshots/nba/latest/260x190')
-            labels = [(f'<img src="{base}/{pid}.png">' + 
-                       f'<p>{nm}</p>') for _, (pid, nm) in 
-                      pred_df[['player_id', 'name']].iterrows()]
-            # create mpld3 tooltip
-            tooltip = MobilePointClickableHTMLTooltip(
-                sc, labels=labels)
-            # add tooltip to figure
-            mpld3.plugins.connect(fig, tooltip)
-            # save figure
-            html = mpld3.fig_to_html(fig)
-            sfile = f'{prediction_folder}/player_ppp_{k}_mobile.html'
-            with open(sfile, 'w') as f:
-                f.write(html)
-            # close plot 
-            plt.close()
+        # create plot
+        #fig, ax = plt.subplots(figsize=(12,10))
+        fig, ax = plt.subplots(figsize=(500/50,500/50), 
+                               dpi=50)
+        # add points to scatter plot
+        sc = ax.scatter(pred_df.off_wmn, pred_df.def_wmn, 
+                        s=marker_size)#, color=colors)
+        # add mean grid line
+        ax.plot([pred_df.off_wmn.min(), 
+                 pred_df.off_wmn.max()], 
+                [pred_df.def_wmn.mean(), 
+                 pred_df.def_wmn.mean()], 
+                ls='--', color='grey')
+        # add other mean grid line
+        ax.plot([pred_df.off_wmn.mean(), 
+                 pred_df.off_wmn.mean()], 
+                [pred_df.def_wmn.min(), 
+                 pred_df.def_wmn.max()], 
+                ls='--', color='grey')
+        # set title
+        ax.set_title(k, fontsize=20)
+        # add labels
+        ax.set_ylabel('Defensive Points Per Possession', 
+                      labelpad=30, fontsize=14)
+        ax.set_xlabel('Offensive Points Per Possession', 
+                       labelpad=20, fontsize=14)
+        #plt.tight_layout() # MAYBE REMOVE
+        # create html labels for scatter plot
+        base = ('https://ak-static.cms.nba.com/wp-content/' + 
+                'uploads/headshots/nba/latest/260x190')
+        labels = [(f'<img src="{base}/{pid}.png">' + 
+                   f'<p>{nm}</p>') for _, (pid, nm) in 
+                  pred_df[['player_id', 'name']].iterrows()]
+        # create mpld3 tooltip
+        tooltip = mpld3.plugins.PointHTMLTooltip(
+            sc, labels=labels)
+        # add tooltip to figure
+        mpld3.plugins.connect(fig, tooltip)
+        # save figure
+        html = mpld3.fig_to_html(fig)
+        sfile = f'{prediction_folder}/player_ppp_{k}.html'
+        with open(sfile, 'w') as f:
+            f.write(html)
+        # close plot 
+        plt.close()
 
 
 def _make_individual_correlations(df):
@@ -872,173 +818,45 @@ def _tandem_predictions(experiment_id):
         else:
             k = ', '.join(i[:4]+'-'+i[4:] for i in k)
         # create figure
-        # check if saving desktop
-        if save_desktop_format:
-            #fig, ax = plt.subplots(figsize=(12,10))
-            #fig, ax = plt.subplots(figsize=(10,8))
-            fig, ax = plt.subplots(figsize=(500/50,500/50), 
-                                   dpi=50)
-            sc = ax.scatter(season_top.off_wmn, season_top.def_wmn, 
-                            s=marker_size)
-            ax.plot([season_df.off_wmn.min(), 
-                     season_df.off_wmn.max()], 
-                    [season_df.def_wmn.mean(), 
-                     season_df.def_wmn.mean()], 
-                    ls='--', color='grey')
-            ax.plot([season_df.off_wmn.mean(), 
-                     season_df.off_wmn.mean()], 
-                    [season_df.def_wmn.min(), 
-                     season_df.def_wmn.max()], 
-                    ls='--', color='grey')  
-            # set title
-            ax.set_title(k, fontsize=20)
-            # add labels
-            ax.set_ylabel('Defensive Points Per Possession', 
-                          labelpad=30, fontsize=14)
-            ax.set_xlabel('Offensive Points Per Possession', 
-                           labelpad=20, fontsize=14)
-            #plt.tight_layout()
-            # create hover labels for scatter plot
-            labels = [f'{n1} - {n2}' for i, (n1, n2) 
-                      in season_top[['name1', 
-                                     'name2']].iterrows()]
-            # create mpld3 tooltip
-            tooltip = mpld3.plugins.PointLabelTooltip(
-                sc, labels=labels)
-            # add tooltip to figure
-            mpld3.plugins.connect(fig, tooltip)
-            # save figure
-            html = mpld3.fig_to_html(fig)
-            sfile = f'{prediction_folder}/tandem_ppp_{k}.html'
-            with open(sfile, 'w') as f:
-                f.write(html)
-            # close plot 
-            plt.close()
-
-        if save_mobile_format:
-            #fig, ax = plt.subplots(figsize=(12,10))
-            #fig, ax = plt.subplots(figsize=(10,8))
-            fig, ax = plt.subplots(figsize=(500/50,500/50), 
-                                   dpi=50)
-            sc = ax.scatter(season_top.off_wmn, season_top.def_wmn, 
-                            s=marker_size)
-            ax.plot([season_df.off_wmn.min(), 
-                     season_df.off_wmn.max()], 
-                    [season_df.def_wmn.mean(), 
-                     season_df.def_wmn.mean()], 
-                    ls='--', color='grey')
-            ax.plot([season_df.off_wmn.mean(), 
-                     season_df.off_wmn.mean()], 
-                    [season_df.def_wmn.min(), 
-                     season_df.def_wmn.max()], 
-                    ls='--', color='grey')  
-            # set title
-            ax.set_title(k, fontsize=20)
-            # add labels
-            ax.set_ylabel('Defensive Points Per Possession', 
-                          labelpad=30, fontsize=14)
-            ax.set_xlabel('Offensive Points Per Possession', 
-                           labelpad=20, fontsize=14)
-            #plt.tight_layout()
-            # create hover labels for scatter plot
-            labels = [f'{n1} - {n2}' for i, (n1, n2) 
-                      in season_top[['name1', 
-                                     'name2']].iterrows()]
-            # create mpld3 tooltip
-            tooltip = MobilePointClickableHTMLTooltip(
-                sc, labels=labels)
-            # add tooltip to figure
-            mpld3.plugins.connect(fig, tooltip)
-            # save figure
-            html = mpld3.fig_to_html(fig)
-            sfile = f'{prediction_folder}/tandem_ppp_{k}_mobile.html'
-            with open(sfile, 'w') as f:
-                f.write(html)
-            # close plot 
-            plt.close()
+        #fig, ax = plt.subplots(figsize=(12,10))
+        #fig, ax = plt.subplots(figsize=(10,8))
+        fig, ax = plt.subplots(figsize=(500/50,500/50), 
+                               dpi=50)
+        sc = ax.scatter(season_top.off_wmn, season_top.def_wmn, 
+                        s=marker_size)
+        ax.plot([season_df.off_wmn.min(), 
+                 season_df.off_wmn.max()], 
+                [season_df.def_wmn.mean(), 
+                 season_df.def_wmn.mean()], 
+                ls='--', color='grey')
+        ax.plot([season_df.off_wmn.mean(), 
+                 season_df.off_wmn.mean()], 
+                [season_df.def_wmn.min(), 
+                 season_df.def_wmn.max()], 
+                ls='--', color='grey')  
+        # set title
+        ax.set_title(k, fontsize=20)
+        # add labels
+        ax.set_ylabel('Defensive Points Per Possession', 
+                      labelpad=30, fontsize=14)
+        ax.set_xlabel('Offensive Points Per Possession', 
+                       labelpad=20, fontsize=14)
+        #plt.tight_layout()
+        # create hover labels for scatter plot
+        labels = [f'{n1} - {n2}' for i, (n1, n2) 
+                  in season_top[['name1', 
+                                 'name2']].iterrows()]
+        # create mpld3 tooltip
+        tooltip = mpld3.plugins.PointLabelTooltip(
+            sc, labels=labels)
+        # add tooltip to figure
+        mpld3.plugins.connect(fig, tooltip)
+        # save figure
+        html = mpld3.fig_to_html(fig)
+        sfile = f'{prediction_folder}/tandem_ppp_{k}.html'
+        with open(sfile, 'w') as f:
+            f.write(html)
+        # close plot 
+        plt.close()
 
 
-class MobilePointClickableHTMLTooltip(PluginBase):
-    """Simple take on PointClickableHTML to work on mobile
-
-    Parameters
-    ----------
-    points : matplotlib Collection object
-        The figure element to apply the tooltip to
-    labels : list
-        The labels for each point in points, as strings of unescaped HTML.
-    targets : list
-        The target data or rich HTML to be displayed when each collection element is clicked
-    hoffset, voffset : integer, optional
-        The number of pixels to offset the tooltip text.  Default is
-        hoffset = 0, voffset = 10
-    css : str, optional
-        css to be included, for styling the label html and target data/tables, if desired
-    """
-
-    JAVASCRIPT="""
-    mpld3.register_plugin("clickablehtmltooltip", MobilePointClickableHTMLTooltip);
-    MobilePointClickableHTMLTooltip.prototype = Object.create(mpld3.Plugin.prototype);
-    MobilePointClickableHTMLTooltip.prototype.constructor = MobilePointClickableHTMLTooltip;
-    MobilePointClickableHTMLTooltip.prototype.requiredProps = ["id"];
-    MobilePointClickableHTMLTooltip.prototype.defaultProps = {labels:null,
-                                                 targets:null,
-                                                 hoffset:0,
-                                                 voffset:10};
-    function MobilePointClickableHTMLTooltip(fig, props){
-        mpld3.Plugin.call(this, fig, props);
-    };
-
-    MobilePointClickableHTMLTooltip.prototype.draw = function(){
-       var obj = mpld3.get_element(this.props.id);
-       var labels = this.props.labels;
-       var targets = this.props.targets;
-
-       var tooltip = d3.select("body").append("div")
-                    .attr("class", "mpld3-tooltip")
-                    .style("position", "absolute")
-                    .style("z-index", "10")
-                    .style("visibility", "hidden");
-
-       obj.elements()
-
-           .on("mousedown", function(d, i){
-               tooltip.html(labels[i])
-                   .style("visibility", "visible")
-                   .style("opacity", 0.9);
-                              })
-
-           .on("mousemove", function(d, i){
-                  tooltip
-                    .style("top", d3.event.pageY + this.props.voffset + "px")
-                    .style("left",d3.event.pageX + this.props.hoffset + "px")
-                    .style("visibility", "hidden")
-                    .style("opacity", 0);
-                 }.bind(this));
-
-    };
-    """
-    def __init__(self, points, labels=None, targets=None,
-                 hoffset=2, voffset=-6, css=None):
-        self.points = points
-        self.labels = labels
-        self.targets = targets
-        self.voffset = voffset
-        self.hoffset = hoffset
-        self.css_ = css or ""
-        if targets is not None:
-            styled_targets = map(lambda x: self.css_ + x, targets)
-        else:
-            styled_targets = None
-
-
-        if isinstance(points, matplotlib.lines.Line2D):
-            suffix = "pts"
-        else:
-            suffix = None
-        self.dict_ = {"type": "clickablehtmltooltip",
-                      "id": get_id(points, suffix),
-                      "labels": labels,
-                      "targets": styled_targets,
-                      "hoffset": hoffset,
-                      "voffset": voffset}
