@@ -14,7 +14,7 @@ Each row is a group of (5) offensive players, (5) defensive players, and other p
 
 ### Case 1: Individual Predictions
  
-The simplest case is predicting single offensive and defensive players. If only one player is selected, the FMs predict how much that player's presence alone influences PPP. The ideal player would have the highest PPP on offense and the lowest PPP on defense --- bottom right of these interactive plots below. The size of the points are relative to the player's number of possessions. The FMs can better learn about players with more possession data, so there's likely more confidence in larger points.  
+The simplest case is predicting single offensive and defensive players. If only one player is selected, the FMs predict how much that player's presence alone influences PPP. The ideal player would have the highest PPP on offense and the lowest PPP on defense &mdash; bottom right of these interactive plots below. The size of the points are relative to the player's number of possessions. The FMs can better learn about players with more possession data, so there's likely more confidence in larger points.  
 
 The individual offensive and defensive PPP for all seasons between 2008 and 2019:
 
