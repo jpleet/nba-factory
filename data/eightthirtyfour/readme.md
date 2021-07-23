@@ -1,1 +1,0 @@
-Data is downloaded from [eightythirtyfour](https://eightthirtyfour.com/data). They have extended play-by-play data that includes all players on the court. This let's us skip a formatting step.
