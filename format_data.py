@@ -2,13 +2,13 @@
 Script to convert NBA play-by-play (pbp) records into lineup scoring data
 - Group pbp into games and periods
   - Iterate over game-period actions
-  - Add any home or visitor players mentioned to home or vistion on-court set
+  - Add any home or visitor players recoreded to home or vistion on-court set
   - Replace players if substituted, keeps on-court sets to max 5
   - Re-iterate actions backwards to fill early times with on-court sets less than 5
   - Store lineups
 - Group games
   - Forward fill all NA scores
-- Record all: seconds, home lineup, visit lineup, points per minute (normalized)
+- Record all: seconds, offense lineup, defense lineup, points 
 
 EVENTMSGTYPE
 
@@ -24,7 +24,6 @@ EVENTMSGTYPE
 10 - Jumpball 
 12 - Start Q1? 
 13 - Start Q2?
-
 """
 
 from glob import glob
@@ -243,10 +242,12 @@ def process_season(filename, processors=None):
     season_lineups.sort_values(['GAME_ID', 'GAME_IDX'], inplace=True)
     season_lineups.reset_index(drop=True, inplace=True)
     
+    # add score at start of game to forward fill
     season_lineups.loc[season_lineups.groupby('GAME_ID').GAME_IDX.idxmin(), 'SCORE'] = '0 - 0'
     
-    season_lineups['HOMESCORE'] = season_lineups.SCORE.str.split('-').str.get(0).str.strip()
-    season_lineups['VISITSCORE'] = season_lineups.SCORE.str.split('-').str.get(1).str.strip()
+    # split score string, visitor score listed first
+    season_lineups['HOMESCORE'] = season_lineups.SCORE.str.split('-').str.get(1).str.strip()
+    season_lineups['VISITSCORE'] = season_lineups.SCORE.str.split('-').str.get(0).str.strip()
     
     season_lineups['HOMESCORE'] = season_lineups.groupby('GAME_ID').HOMESCORE.ffill().astype(int)
     season_lineups['VISITSCORE'] = season_lineups.groupby('GAME_ID').VISITSCORE.ffill().astype(int)
@@ -280,26 +281,24 @@ def process_season(filename, processors=None):
                                                          'visit_lineup', 'home_points', 'visit_points'])
     lineup_scores = lineup_scores[lineup_scores.seconds > 0].copy()
     
-    lineup_scores['home_ppm'] = lineup_scores.home_points / (lineup_scores.seconds / 60) 
-    lineup_scores['visit_ppm'] = lineup_scores.visit_points / (lineup_scores.seconds / 60) 
-    
-    mn, st = lineup_scores[['home_ppm', 'visit_ppm']].unstack().agg(['mean', 'std'])
-    lineup_scores['home_ppm_norm'] = (lineup_scores.home_ppm - mn) / st
-    lineup_scores['visit_ppm_norm'] = (lineup_scores.visit_ppm - mn) / st
-    
     data = []
 
     for _, row in lineup_scores.iterrows():
         sec = row['seconds']
         hl = row['home_lineup']
         vl = row['visit_lineup']
-        hpn = row['home_ppm_norm']
-        vpn = row['visit_ppm_norm']
+        hp = row['home_points']
+        vp = row['visit_points']
 
-        data.append([sec, hl, vl, hpn])
-        data.append([sec, vl, hl, vpn])
+        data.append([sec, hl, vl, hp])
+        data.append([sec, vl, hl, vp])
 
-    data = pd.DataFrame(data, columns=['seconds', 'offense_lineup', 'defense_lineup', 'ppm_norm'])
+    data = pd.DataFrame(data, columns=['seconds', 'offense_lineup', 'defense_lineup', 'points'])
+    
+    data[['off1', 'off2', 'off3', 'off4', 'off5']] = pd.DataFrame(data.offense_lineup.to_list())
+    data[['def1', 'def2', 'def3', 'def4', 'def5']] = pd.DataFrame(data.defense_lineup.to_list())
+    
+    data.drop(columns=['offense_lineup', 'defense_lineup'], inplace=True)
     
     return data
 
@@ -308,7 +307,7 @@ if __name__ == "__main__":
 
     pbp_files = sorted(glob('data/raw_pbp/*_pbp.csv'))
 
-    for pbp_file in pbp_files[0:3]:
+    for pbp_file in pbp_files:
 
         print(pbp_file)
 
@@ -319,6 +318,7 @@ if __name__ == "__main__":
 
         if not os.path.exists(save_file):
             data = process_season(pbp_file)
+            data['season'] = season
             data.to_pickle(save_file)
 
         end_time = timeit.default_timer()
