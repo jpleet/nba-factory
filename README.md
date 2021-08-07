@@ -38,4 +38,4 @@ TO DO: find the best teammates
 
 ## All Seasons Field-aware Factorization Machine
 
-TO DO: are FFMs better
+TO DO: are FFMs better?
