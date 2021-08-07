@@ -12,25 +12,25 @@ Predictions with the trained FMs are used to isolate each player's offensive and
 
 Interactive hover scatter plots of individual contributions by season. Again, ideal players have high offensive values and low defensive values.
 
-[2000-01](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2001-02](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2002-03](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2003-04](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2004-05](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2005-06](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2006-07](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2007-08](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2008-09](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2009-10](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2010-11](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2011-12](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2012-13](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2013-14](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2014-15](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2015-16](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2016-17](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2017-18](jpleet.github.io/nba-factory/plots/2000-01.html), 
-[2018-19](jpleet.github.io/nba-factory/plots/2000-01.html) 
+[2000-01](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2001-02](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2002-03](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2003-04](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2004-05](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2005-06](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2006-07](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2007-08](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2008-09](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2009-10](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2010-11](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2011-12](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2012-13](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2013-14](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2014-15](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2015-16](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2016-17](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2017-18](https://jpleet.github.io/nba-factory/plots/2000-01.html), 
+[2018-19](plots/2000-01.html) 
 
 ## Tandem Contributions
 
