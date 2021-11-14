@@ -4,11 +4,13 @@ Quantifying the offensive and defensive contribution of NBA players with factori
 
 ![](sparse_regression.png)
 
-Predictions from the FMs can isolate each player's offensive and defensive contributions. Better players have higher offensive values (more points scored) and lower defensive values (less scored on). The scripts contain more information.
+The scripts contain more information.
 
 ## Individual Contributions
 
-Created from running `main_contribution.py`. Interactive hover scatter plots of individual contributions by season. Again, ideal players have high offensive values (x-axis) and low defensive values (y-axis).
+Created from running `main_contribution.py`
+
+Predictions from the FMs are used to isolate each player's offensive and defensive contributions, a measure of points per minute in a controlled game. Ideal players have higher offensive values (more points scored, x-axis) and lower defensive values (less scored on, y-axis). See these links for interactive hover plots. The dropdown menu can select individual teams.
 
 [2000-01](https://jpleet.github.io/nba-factory/data/plots/2000-01.html), 
 [2001-02](https://jpleet.github.io/nba-factory/data/plots/2001-02.html), 
@@ -30,8 +32,18 @@ Created from running `main_contribution.py`. Interactive hover scatter plots of 
 [2017-18](https://jpleet.github.io/nba-factory/data/plots/2017-18.html), 
 [2018-19](https://jpleet.github.io/nba-factory/data/plots/2018-19.html)
 
+Thoughout a season, there's more lineup pairings between teammates than opposing players, so the FMs likely better learn interactions between teammates, making these predicted contribution values more relative to team dynamics, which explains why some non-All-Stars stand out.
+
 ## Individual Contributions and Team Success
 
-## Tandem Contributions
+TO DO
 
-TO DO: find the best teammates
+Created from running `main_contribution_success.py`
+
+Examining if individual contributions within a team correspond to team sucess.
+
+## Teammates
+
+TO DO
+
+Who are good teammates? Prediction together in a control environment. Maybe create matrix plot of above/below individual max OR use both players individual and if above

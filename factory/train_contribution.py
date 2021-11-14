@@ -167,11 +167,6 @@ def _train_season(season_file, params, lineup_quantile, season_quantile, min_sea
         player_df_temp = player_df_temp.merge(pred_df.rename(columns={'predict' : 'off_predict', 'LAT_ID' : 'OFF_ID'}), on='OFF_ID', how='left')
         player_df_temp = player_df_temp.merge(pred_df.rename(columns={'predict' : 'def_predict', 'LAT_ID' : 'DEF_ID'}), on='DEF_ID', how='left')
 
-        #player_df_temp['off_contribution_norm'] = ((player_df_temp.off_contribution - player_df_temp.off_contribution.mean()) / 
-        #                                           (player_df_temp.off_contribution.std()))
-        #player_df_temp['def_contribution_norm'] = ((player_df_temp.def_contribution - player_df_temp.def_contribution.mean()) / 
-        #                                           (player_df_temp.def_contribution.std()))
-
         player_df_temp = player_df_temp.merge(player_time, on='PERSON_ID', how='left')
 
         player_df_temp['cv_mse'] = cv_mse
