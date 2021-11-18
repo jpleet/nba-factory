@@ -44,7 +44,7 @@ def format_data():
 def _process_season(pbp_file, processors=None):
     
     # open season play by plays
-    season_pbp = pd.read_csv(filename)
+    season_pbp = pd.read_csv(pbp_file)
     
     ########################
     # Format all season data

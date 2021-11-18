@@ -8,8 +8,11 @@ from tqdm import tqdm
 
 def plot_contribution(read_directory='data/contribution_predictions/',
                       save_directory='data/plots/contribution/'):
-
+    
     print('Plotting')
+    
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
     
     player_info = pd.read_csv('data/raw_pbp/playerlist.csv', index_col=[0])
     pred_files = sorted(glob(read_directory + '*.pkl'))
@@ -66,7 +69,7 @@ def plot_contribution(read_directory='data/contribution_predictions/',
 
         fig.add_vline(x=res['off'].mean(), line_width=2, line_dash="dash", line_color="red")
         fig.add_hline(y=res['off'].mean(), line_width=2, line_dash="dash", line_color="red")
-
+        
         buttons = [dict(method='update',
                         label='All',
                         args=[{'x': [res['off']],
