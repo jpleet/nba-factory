@@ -1,94 +1,131 @@
 # NBA FACTORIZATION MACHINES
 
-Quantifying the offensive and defensive contribution of NBA players with factorization machines (FMs). From play-by-play data, lineups and points scored per second are extracted. An ensemble of regression FMs are trained on the lineup data to learn individual offensive and defensive latent variables. The model form looks like:
+A framework to quantify NBA players using [factorization machines](https://ieeexplore.ieee.org/document/5694074) (FMs). An FM takes formatted play-by-play data and learns the interactions and contributions of NBA players to scoring and defending. 
 
-![](sparse_regression.png)
+Overview: Section 1 describes the data formatting. Section 2 isolates individual offensive and defensive contributions. Section 3 finds the best teammates. Section 4 discusses extensions and future analyses. The notebooks contain more information.
 
-The scripts contain more information.
+## 1. Data Preparation
 
-## Individual Contributions
+### Download
 
-Created from running `contribution.py`
+See: `download_data.ipynb`
 
-Predictions from the FMs are used to isolate each player's offensive and defensive contributions, a measure of points per minute in a statistically controlled game. Ideal players have higher offensive values (more points scored, x-axis) and lower defensive values (less scored on, y-axis). See these links for interactive hover plots. The dropdown menu can select individual teams, which might be more informative.
+Play-by-play and rotation data are downloaded (really slowly) from the NBA-API.
 
-[2000-01](https://jpleet.github.io/nba-factory/data/plots/contribution/2000-01.html), 
-[2001-02](https://jpleet.github.io/nba-factory/data/plots/contribution/2001-02.html), 
-[2002-03](https://jpleet.github.io/nba-factory/data/plots/contribution/2002-03.html), 
-[2003-04](https://jpleet.github.io/nba-factory/data/plots/contribution/2003-04.html), 
-[2004-05](https://jpleet.github.io/nba-factory/data/plots/contribution/2004-05.html), 
-[2005-06](https://jpleet.github.io/nba-factory/data/plots/contribution/2005-06.html), 
-[2006-07](https://jpleet.github.io/nba-factory/data/plots/contribution/2006-07.html), 
-[2007-08](https://jpleet.github.io/nba-factory/data/plots/contribution/2007-08.html), 
-[2008-09](https://jpleet.github.io/nba-factory/data/plots/contribution/2008-09.html), 
-[2009-10](https://jpleet.github.io/nba-factory/data/plots/contribution/2009-10.html), 
-[2010-11](https://jpleet.github.io/nba-factory/data/plots/contribution/2010-11.html), 
-[2011-12](https://jpleet.github.io/nba-factory/data/plots/contribution/2011-12.html), 
-[2012-13](https://jpleet.github.io/nba-factory/data/plots/contribution/2012-13.html), 
-[2013-14](https://jpleet.github.io/nba-factory/data/plots/contribution/2013-14.html), 
-[2014-15](https://jpleet.github.io/nba-factory/data/plots/contribution/2014-15.html), 
-[2015-16](https://jpleet.github.io/nba-factory/data/plotscontribution/2015-16.html), 
-[2016-17](https://jpleet.github.io/nba-factory/data/plots/contribution/2016-17.html), 
-[2017-18](https://jpleet.github.io/nba-factory/data/plots/contribution/2017-18.html), 
-[2018-19](https://jpleet.github.io/nba-factory/data/plots/contribution/2018-19.html)
+### Format Data
 
-Throughout a season, there's more lineup pairings between teammates than opposing players, so the FMs get more team information and likely better learn interactions between teammates, making these predicted contribution values probably more encompassing of team dynamics, which might explains why some non-All-Stars stand out. 
+See: `format_data.ipynb`
+ 
+The rotations are converted to lineups and merged with the scores in the play-by-play data. For each lineup, the amount of home and visitor points scored over their playing time are tallied. The lineup data for a game looks like:
 
-## Individual Contributions and Team Success
+| Home Lineup      | Visitor Lineup    | Home Points | Visitor Points | Playing Time (s) | Quarter |
+|------------------|-------------------|-------------|----------------|------------------|---------|
+| (h1,h2,h3,h4,h5) | (v1,v2,v3,v4,v5)  | 10          | 6              | 240              | 1       |
+| (h2,h3,h4,h5,h6) | (v1,v2,v3,v4,v5)  | 4           | 8              | 200              | 1       |
+| (h2,h3,h4,h5,h6) | (v3,v4,v5,v6,v7)  | 12          | 14             | 280              | 1       |
+| ...              | ...               | ...         | ...            | ...              | ...     |
 
-This section explores individual contributions and team dynamics, like winning in regular season and playoffs.
+This lineup data is then filtered, depending on the training requirements, and converted to a sparse format that looks like:
 
-### Team Aggregate
+| off_1 | off_2 | ... | off_n | def_1 | def_2 | ... | def_n | extra |   | points per time  (normalized) |
+|-------|-------|-----|-------|-------|-------|-----|-------|-------|---|-------------------------------|
+| 0     | 0     | ... | 0     | 0     | 1     | ... | 0     | ...   | = | ppt1                          |
+| 0     | 1     | ... | 0     | 0     | 0     | ... | 0     | ...   | = | ppt2                          |
+| ...   | ...   | ... | ...   | ...   | ...   | ... | ...   | ...   | = | ...                           |
 
-Created from running `contribution_aggregate_success.py`
+Each lineup has two inputs into this sparse format: 
+- one row with the home team's offensive IDs (off_id) set, visitor team's defensive IDs set (def_id), and home points per time
+- one row with the visitor team's offensive IDs (off_id) set, home team's defensive IDs set (def_id), and visitor points per time
 
-Starting simple, the offensive and defensive contribution per team are aggregated and plotted with winning rates (_wins/games_). 
+There can be extra features, like is offense the home team or the quarter. For now there are no extra features, but something probably worth investigating later.
 
-| Team Offensive Aggregation | Team Defensive  Aggregation | Plot                                                                                                  |
-|----------------------------|-----------------------------|-------------------------------------------------------------------------------------------------------|
-| Max                        | Min                         | [Max-Min](https://jpleet.github.io/nba-factory/data/plots/aggregate_success/max_min.html)             |
-| Median                     | Median                      | [Median-Median](https://jpleet.github.io/nba-factory/data/plots/aggregate_success/median_median.html) |
-| Mean                       | Mean                        | [Mean-Mean](https://jpleet.github.io/nba-factory/data/plots/aggregate_success/mean_mean.html)         |
+In the next sections, FMs learn how the presence, absence, and interaction of players affect points per time (or some normalized metric of contribution). 
 
-This is a good sanity check of the FMs. With Max-Min aggregation, there's no clear visual pattern with team winning rates &mdash; the best a team has to offer alone doesn't seem to affect winning. Similar with Median-Median, the middle contribution of a team, like the 4th-6th man, alone doesn't seem to have a strong impact winning. But there are clear strong patterns with Mean-Mean: the center of a team's contribution mass does correlate with winning. Teams with overall better individual offensive and defensive contributions win more, passing the sanity check.
+## 2. Individual Contributions
 
-### Team Top Contributions
+See: `individual_contributions.ipynb`
 
-Created from running `contribution_top_success.py`
+For each season, several FMs are trained on the sparse lineup data and their predictions are combined to infer individual offensive and defensive contributions. 
 
-Investigating the importance of specific individual contributions on winning. The prediction data is formatted as:
+A single FM will learn the latent factors of players from the training data and then be used to make several predictions:
+1. with no players set to predict a baseline control value
+2. with each individual offensive player set on its own to isolate offensive contributions
+3. with each individual defensive player set on its own to isolate defensive contributions
+Lastly, the predicted contributions are centered from the control.
 
-| team          | off<sub>1</sub> | off<sub>2</sub> | ... | off<sub>N</sub> | def<sub>1</sub> | def<sub>2</sub> | ... | def<sub>N</sub> | win rate      | 
-|---------------|-----------------|-----------------|-----|-----------------|-----------------|-----------------|-----|-----------------|---------------|
-| t<sub>1</sub> | o<sub>11</sub>  | o<sub>12</sub>   | ... | o<sub>1N</sub>   | d<sub>11</sub>  | d<sub>12</sub>   | ... | d<sub>1N</sub>   | w<sub>1</sub> |
-| t<sub>2</sub> | o<sub>21</sub>  | o<sub>22</sub>   | ... | o<sub>2N</sub>   | d<sub>21</sub>  | d<sub>22</sub>   | ... | d<sub>2N</sub>   | w<sub>2</sub> |
+Because there isn't an immense amount of data, FMs are both bootstrapped and ensembled. Bootstrapping involves repeatedly training on a subset of the data and then averaging the predicted contributions. Here, the left out data is used as validation and the validation accuracy is applied as a weight when averaging the predicted contributions. FMs also have several training parameters (like number of latent factors), but instead of trying to find optimal parameters, the bootstrap samples are trained on different parameters and all these FMs are ensembled to produce single individual offensive and defensive predictions.  
 
-There are different ways to arrange a team's offensive (_off_) and defensive (_def_) values. One way is taking the sorted N-highest offensive and N-lowest defensive values, though this might be skewed by garbage bench player time. Or, the offensive and defensive spots can be allocated by time: the first spot to the player with the most playing time, next most is second, up until _N_ most played spots are filled.  
+Links below are interactive season results. Better players have higher offensive and lower defensive contributions. Teams can be selected from the drop-down menu.
 
+[1996-97](https://jpleet.github.io/nba-factory/results/individual/1996-97.html), 
+[1997-98](https://jpleet.github.io/nba-factory/results/individual/1997-98.html), 
+[1998-99](https://jpleet.github.io/nba-factory/results/individual/1998-99.html), 
+[1999-00](https://jpleet.github.io/nba-factory/results/individual/1990-00.html), 
+[2000-01](https://jpleet.github.io/nba-factory/results/individual/2000-01.html), 
+[2001-02](https://jpleet.github.io/nba-factory/results/individual/2001-02.html), 
+[2002-03](https://jpleet.github.io/nba-factory/results/individual/2002-03.html), 
+[2003-04](https://jpleet.github.io/nba-factory/results/individual/2003-04.html), 
+[2004-05](https://jpleet.github.io/nba-factory/results/individual/2004-05.html), 
+[2005-06](https://jpleet.github.io/nba-factory/results/individual/2005-06.html), 
+[2006-07](https://jpleet.github.io/nba-factory/results/individual/2006-07.html), 
+[2007-08](https://jpleet.github.io/nba-factory/results/individual/2007-08.html), 
+[2008-09](https://jpleet.github.io/nba-factory/results/individual/2008-09.html), 
+[2009-10](https://jpleet.github.io/nba-factory/results/individual/2009-10.html), 
+[2010-11](https://jpleet.github.io/nba-factory/results/individual/2010-11.html), 
+[2011-12](https://jpleet.github.io/nba-factory/results/individual/2011-12.html), 
+[2012-13](https://jpleet.github.io/nba-factory/results/individual/2012-13.html), 
+[2013-14](https://jpleet.github.io/nba-factory/results/individual/2013-14.html), 
+[2014-15](https://jpleet.github.io/nba-factory/results/individual/2014-15.html), 
+[2015-16](https://jpleet.github.io/nba-factory/results/individual/2015-16.html), 
+[2016-17](https://jpleet.github.io/nba-factory/results/individual/2016-17.html), 
+[2017-18](https://jpleet.github.io/nba-factory/results/individual/2017-18.html), 
+[2018-19](https://jpleet.github.io/nba-factory/results/individual/2018-19.html),
+[2019-20](https://jpleet.github.io/nba-factory/results/individual/2019-20.html),
+[2020-21](https://jpleet.github.io/nba-factory/results/individual/2020-21.html),
+[2021-22](https://jpleet.github.io/nba-factory/results/individual/2021-22.html)
 
-Either way the values are organized, regression models (boosted trees) with *win_rate* as the target and the top-N arranged offensive an defensive contributions as the predictors are cross-validated and the mean R<sup>2</sup> scores are plotted against varying *N* (sample size=566). 
+These individual contributions have strong correlations with other metrics of NBA players. 
 
-    
-![](data/plots/top_success/cross_val_test.png)
-    
-Some takeways from this cross-validation test:
-- the model makes the best winning predictions with 6+ player contributions considered
-- there isn't much gain with more than 6 players in the model
-- arranging by time played is more informative, has better prediction power
-- the contribution values of 6+ players explains a lot (over 40%) of the variance in winning
+-- ADD PLOTS
 
-The next test focuses on the best parameters: the time-sorted contributions of 6 players. Random forest regression models are fit on winning rates to get the feature importance of each time position.
+But unlike other metrics, this framework allows for interactions and can predict who works better together.
 
-![](data/plots/top_success/winning_importance.png)
+## 2. Teammate Dynamics
 
-The contribution of the most playing player (*off1* and *def1*) has the most importance on winning. This makes sense: if they're playing the most, it's because the coach thinks they offer the best chance to win. The offense of the second most playing player also seems to have more importance on winning. The other time positions, the second most defense and all others, don't seem to have as strong nor different impact on winning. 
+See: `teammate_dynamics.ipynb`
 
-Taking this one step further, instead of predicting the winning rate with the top-6 time-sorted contributions, a random forest classifier can tease apart contributions between championship and non-championship teams. This is imblanaced data (19/566) and special imbalanced random forest classifiers are trained on different subsets of the data.
-    
-![](data/plots/top_success/championship_importance.png)
+Over an NBA season, players have far more interactions with their teammates than opponents and FMs can probably better infer teammate dynamics.
 
-The defensive contribution of regular season winning and championship winnnig follow a similar pattern: the most playing player has the most importance influence, while the rest are not too different and not as important. Interestingly, the offensive contribution of regular season winning and championship winning are different: the offensive contribution of 3rd, 4th, and 5th players are most important in predicting a championship win.  
+The same bootstrap ensemble methods from above are repeated, except now the FMs predict on all combinations of teammates.
 
-## Teammates
+[1996-97](https://jpleet.github.io/nba-factory/results/teammates/1996-97.html), 
+[1997-98](https://jpleet.github.io/nba-factory/results/teammates/1997-98.html), 
+[1998-99](https://jpleet.github.io/nba-factory/results/teammates/1998-99.html), 
+[1999-00](https://jpleet.github.io/nba-factory/results/teammates/1990-00.html), 
+[2000-01](https://jpleet.github.io/nba-factory/results/teammates/2000-01.html), 
+[2001-02](https://jpleet.github.io/nba-factory/results/teammates/2001-02.html), 
+[2002-03](https://jpleet.github.io/nba-factory/results/teammates/2002-03.html), 
+[2003-04](https://jpleet.github.io/nba-factory/results/teammates/2003-04.html), 
+[2004-05](https://jpleet.github.io/nba-factory/results/teammates/2004-05.html), 
+[2005-06](https://jpleet.github.io/nba-factory/results/teammates/2005-06.html), 
+[2006-07](https://jpleet.github.io/nba-factory/results/teammates/2006-07.html), 
+[2007-08](https://jpleet.github.io/nba-factory/results/teammates/2007-08.html), 
+[2008-09](https://jpleet.github.io/nba-factory/results/teammates/2008-09.html), 
+[2009-10](https://jpleet.github.io/nba-factory/results/teammates/2009-10.html), 
+[2010-11](https://jpleet.github.io/nba-factory/results/teammates/2010-11.html), 
+[2011-12](https://jpleet.github.io/nba-factory/results/teammates/2011-12.html), 
+[2012-13](https://jpleet.github.io/nba-factory/results/teammates/2012-13.html), 
+[2013-14](https://jpleet.github.io/nba-factory/results/teammates/2013-14.html), 
+[2014-15](https://jpleet.github.io/nba-factory/results/teammates/2014-15.html), 
+[2015-16](https://jpleet.github.io/nba-factory/results/teammates/2015-16.html), 
+[2016-17](https://jpleet.github.io/nba-factory/results/teammates/2016-17.html), 
+[2017-18](https://jpleet.github.io/nba-factory/results/teammates/2017-18.html), 
+[2018-19](https://jpleet.github.io/nba-factory/results/teammates/2018-19.html),
+[2019-20](https://jpleet.github.io/nba-factory/results/teammates/2019-20.html),
+[2020-21](https://jpleet.github.io/nba-factory/results/teammates/2020-21.html),
+[2021-22](https://jpleet.github.io/nba-factory/results/teammates/2021-22.html)
 
-TO DO: Who are good teammates? Maybe look where player1 + player2 > max(player1, player2) 
+It's also fun to see who hypothetically would be the best teammates.
+
+[2021-22](https://jpleet.github.io/nba-factory/results/teammates/2021-22_all.html)
+
